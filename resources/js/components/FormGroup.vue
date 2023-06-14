@@ -86,6 +86,29 @@
                     :show-help-text="item.helpText != null"
                     :class="{ 'remove-bottom-border': index == group.fields.length - 1 }"
                 />
+
+                <div v-if="!group.title" class="flex w-full shrink justify-end">
+                    <button
+                        dusk="delete-group"
+                        type="button"
+                        class="group-control btn pr-4 border-gray-200 dark:border-gray-700 h-8 block"
+                        :title="__('Delete')"
+                        @click.prevent="confirmRemove">
+                        <span class="inline-flex items-baseline">
+                        <icon type="trash" width="16" height="16" class="in" />
+                            <span> {{ __('Delete') }}</span>
+                        </span>
+                    </button>
+                    <delete-flexible-content-group-modal
+                        v-if="removeMessage"
+                        @confirm="remove"
+                        @close="removeMessage=false"
+                        :message="field.confirmRemoveMessage"
+                        :yes="field.confirmRemoveYes"
+                        :no="field.confirmRemoveNo"
+                    />
+                </div>
+
             </div>
         </div>
     </div>
@@ -131,7 +154,7 @@ export default {
 
             if (! this.group.title) {
                 classes.push('border-t');
-                classes.push('rounded-tr-lg');
+                classes.push('rounded-t-lg');
             }
 
             if (this.collapsed) {
